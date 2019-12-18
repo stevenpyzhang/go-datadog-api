@@ -52,7 +52,7 @@ func (self *Client) doJsonRequest(method, api string,
 		}
 		bodyreader = bytes.NewReader(bjson)
 	}
-
+	fmt.Println("steven is here")
 	req, err := http.NewRequest(method, self.uriForAPI(api), bodyreader)
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (self *Client) doJsonRequest(method, api string,
 	if bodyreader != nil {
 		req.Header.Add("Content-Type", "application/json")
 	}
-
+	fmt.Println(self.uriForAPI(api))
 	// Perform the request and retry it if it's not a POST request
 	var resp *http.Response
 	if method == "POST" {
@@ -88,6 +88,8 @@ func (self *Client) doJsonRequest(method, api string,
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
+	fmt.Println("steven checking up here")
+	fmt.Println(string(body))
 	if err != nil {
 		return err
 	}
@@ -114,7 +116,8 @@ func (self *Client) doRequestWithRetries(req *http.Request, maxTime time.Duratio
 		bo   = backoff.NewExponentialBackOff()
 	)
 	bo.MaxElapsedTime = maxTime
-
+	fmt.Println("I would like to check what the request uri is")
+	fmt.Print(req.RequestURI)
 	err = backoff.Retry(func() error {
 		resp, err = self.HttpClient.Do(req)
 		if err != nil {
